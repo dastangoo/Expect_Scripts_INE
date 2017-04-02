@@ -1,0 +1,60 @@
+#!/usr/bin/expect
+
+set host_name "localhost"
+set user "root"
+set url "http://nginx.org/download/nginx-1.7.8.tar.gz"
+
+set password "toor"
+
+proc get_dir_name {url} {
+	set strip_end ".tar.gz"
+	set strip_beginning {.*\/}
+	set dirName 0 
+	
+	regsub -- $strip_end $url "" noEnding
+	regsub -- $strip_beginning $noEnding "" dirName
+	if {$dirName == ""} {
+		set dirName "-1"
+	}
+	return $dirName
+}
+
+
+proc get_file_name {url} {
+	set strip_beginning {.*\/}
+	set fileName 0
+	
+	regsub -- $strip_beginning $url "" fileName
+	if {$fileName == ""} {
+		set fileName "-1"
+	}
+	return $fileName
+}
+spawn ssh "$user\@$host_name"
+expect "ssword:"
+send "$password\r"
+expect "*# "
+
+set dirName [get_dir_name $url]
+if {$dirName == -1} {
+	puts "Directory Name could not be determined for $url"
+} else {
+	puts "Directory name was determined to be $dirName"
+}
+
+send "mkdir $dirName\r"
+expect "*# "
+send "cd $dirName\r"
+expect "*$dirName\# "
+send "wget $url\r"
+expect "*$dirName# "
+
+puts "$url"
+set fileName [get_file_name $url]
+if {$fileName == -1} {
+	puts "File Name could not be determined for $url"
+} else {
+	puts "File Name was determined to be $fileName"
+}
+send "tar -xvf $fileName \r"
+expect "*$dirName# "

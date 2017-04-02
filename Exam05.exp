@@ -1,0 +1,16 @@
+#!/usr/bin/expect
+
+set ip "192.168.96.7"
+set user "dastangoo"
+set password "P@ssw0rd"
+spawn ssh "$user\@$ip"
+
+expect "ssword:" 
+	send "$password\r"
+expect "*>"
+	send "show ip int br\r"
+expect " --More--"
+	send "\r"
+expect "*>"
+	send "exit\r"
+

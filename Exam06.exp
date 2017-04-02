@@ -1,0 +1,46 @@
+#!/usr/bin/expect
+
+
+set ip "localhost"
+set user1 "root"
+set user2 "Test_User"
+set password1 "toor"
+set password2 "P@ssw0rd"
+
+
+set timeout 30
+
+
+spawn ssh "$user1\@$ip"
+set proc1 $spawn_id
+
+expect -i $proc1 "ssword:"
+send -i $proc1 "$password1\r"
+
+expect -i $proc1 "*# "
+send -i $proc1 "pwd\r"
+
+spawn ssh "$user2\@$ip"
+set proc2 $spawn_id
+
+expect -i $proc2 "ssword:"
+send -i $proc2 "$password2\r"
+
+expect -i $proc2 "*# "
+send -i $proc2 "pwd/r"
+
+expect -i $proc1 "*# "
+expect -i $proc2 "*# "
+
+
+interact {
+		\001 {puts "You typed a control-A\en";
+		send "\001"
+	}
+	$ {puts "The date is [exec date]."}
+	$timeout {return}
+}
+puts "No longer in the interact block. Returning control to expect."
+send "ls\r"
+expect "*# "
+send "exit\r"

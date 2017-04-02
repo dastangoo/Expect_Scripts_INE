@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+set host_name "localhost"
+set user "root"
+set password "toor"
+
+spawn ssh "$user\@$host_name"
+
+expect "ssword:" {
+	send "$password\r"
+}
+
+expect "\# " {
+	send "whoami\r"
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/expect
+
+set host_name "localhost"
+set user "root"
+set password "toor"
+set timeout 30
+spawn ssh "$user\@$host_name"
+
+expect "ssword:" 
+	send "$password\r"
+expect "*#"
+	send "whoami\r"
+expect "*#"
+	send "ls\r"
+expect "*#" 
+	send "pwd\r"
+expect "*#"

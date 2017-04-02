@@ -1,0 +1,10 @@
+#!/usr/bin/expect
+
+#spawn ssh root@localhost
+spawn ssh "dastangoo\@192.168.96.7"
+expect "ssword:" {
+	send "P@ssw0rd\r"
+}
+expect "unix:user~>" {
+	send "exit\r"
+}

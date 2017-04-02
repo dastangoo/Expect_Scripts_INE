@@ -1,0 +1,11 @@
+#!/usr/bin/expect
+
+set password "toor"
+spawn ssh root@localhost
+
+expect "ssword:" {
+	send "$password\r"
+}
+expect "unix:user~>" {
+	send "exit\r"
+}

@@ -1,0 +1,28 @@
+#!/usr/bin/expect 
+
+set hostname "localhost"
+set user "root"
+set password {root remote toor}
+
+spawn ssh "$user\@$hostname"
+
+set i 0 
+
+expect {
+	"ssword: " { send "[lindex $password $i]\r"; incr i; exp_continue }
+	"*# " { puts "login successful" }
+}
+
+send "ls \r"
+expect "*# "
+send "whoami \r"
+expect "*# "
+set who $expect_out(buffer)
+puts "I am $who"
+
+if {[string match "*root*" $who]} {
+	puts "You are who you think you are"
+}
+
+
+send "exit\r"
